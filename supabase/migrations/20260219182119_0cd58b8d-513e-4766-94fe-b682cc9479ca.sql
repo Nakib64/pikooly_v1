@@ -1,0 +1,1 @@
+ALTER TABLE public.categories ADD COLUMN seo_title TEXT;

@@ -1,0 +1,1 @@
+ALTER TABLE public.sliders ADD COLUMN subtitle TEXT DEFAULT NULL;

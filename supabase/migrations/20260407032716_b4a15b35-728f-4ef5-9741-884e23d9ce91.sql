@@ -1,0 +1,8 @@
+UPDATE categories SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/categories/same-day-new.png' WHERE id = '8557fad6-9bd7-4e70-8c2a-b23e5b06b31d';
+UPDATE categories SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/categories/birthday-new.png' WHERE id = '12af7d69-39c5-408d-890f-986c36b88e81';
+UPDATE categories SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/categories/gift-sets-new.png' WHERE id = '996bbc53-b96e-4175-9808-b61941aff572';
+UPDATE categories SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/categories/flowers-new.png' WHERE id = 'b3bd2a6c-cbc2-4f84-8214-dc71a1925848';
+UPDATE categories SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/categories/cake-new.png' WHERE id = '4a71ac31-7dbb-41de-8bf8-7bf804a3a622';
+UPDATE categories SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/categories/makeup-new.png' WHERE id = 'fcefbac5-130d-433a-9219-6083537a39a3';
+UPDATE categories SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/categories/perfumes-new.png' WHERE id = '91025152-9c7f-463a-9bdc-22eb936d02ec';
+UPDATE categories SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/categories/premium-new.png' WHERE id = 'fbea9145-3311-47b7-880a-b6436346d5a6';

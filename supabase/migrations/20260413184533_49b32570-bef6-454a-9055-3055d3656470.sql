@@ -1,0 +1,1 @@
+ALTER TABLE public.celebrations ADD COLUMN bg_color text DEFAULT null;

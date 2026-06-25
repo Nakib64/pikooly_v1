@@ -1,0 +1,2 @@
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS delivery_mode_id uuid REFERENCES public.delivery_modes(id) ON DELETE SET NULL;
+COMMENT ON COLUMN public.products.delivery_mode_id IS 'Optional per-product delivery mode override. When set, takes precedence over the category-level mapping.';

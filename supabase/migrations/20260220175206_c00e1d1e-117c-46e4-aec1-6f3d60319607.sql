@@ -1,0 +1,1 @@
+ALTER TABLE public.categories ADD COLUMN show_in_header boolean NOT NULL DEFAULT true;

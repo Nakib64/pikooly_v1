@@ -1,0 +1,1 @@
+ALTER TABLE public.subcategories ADD COLUMN IF NOT EXISTS show_in_shop_by_category boolean NOT NULL DEFAULT false;

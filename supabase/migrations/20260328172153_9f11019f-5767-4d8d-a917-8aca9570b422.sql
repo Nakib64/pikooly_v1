@@ -1,0 +1,1 @@
+ALTER TABLE public.subcategories ADD COLUMN show_in_tailored boolean NOT NULL DEFAULT false;

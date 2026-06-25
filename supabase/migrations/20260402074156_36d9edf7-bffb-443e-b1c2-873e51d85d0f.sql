@@ -1,0 +1,1 @@
+ALTER TABLE public.sliders ADD COLUMN bg_image_url text;

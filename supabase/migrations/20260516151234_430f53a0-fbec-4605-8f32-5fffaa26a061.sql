@@ -1,0 +1,1 @@
+UPDATE site_settings SET value = REPLACE(value, 'PikoolyFlora', 'Pikooly') WHERE value ILIKE '%pikoolyflora%';

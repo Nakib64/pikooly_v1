@@ -1,0 +1,1 @@
+ALTER TABLE public.shipping_districts ADD COLUMN IF NOT EXISTS postal_code TEXT;

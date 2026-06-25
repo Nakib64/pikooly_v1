@@ -1,0 +1,55 @@
+project_id = "uizdqqyiqxkcjufkksrc"
+
+[functions.eps-payment]
+verify_jwt = false
+
+[functions.stripe-payment]
+verify_jwt = false
+
+[functions.paypal-payment]
+verify_jwt = false
+
+[functions.sync-google-reviews]
+verify_jwt = false
+[functions.get-maps-key]
+verify_jwt = false
+
+[functions.google-sheets-sync]
+verify_jwt = false
+
+[functions.ai-generate-product]
+verify_jwt = false
+
+[functions.ai-smart-search]
+verify_jwt = false
+
+[functions.ai-bouquet-preview]
+verify_jwt = false
+
+[functions.notify-affiliate]
+verify_jwt = false
+
+[functions.ai-blog-image]
+verify_jwt = false
+
+[functions.create-seller-auth]
+verify_jwt = true
+
+
+[functions.request-phone-otp]
+verify_jwt = false
+
+[functions.verify-phone-otp]
+verify_jwt = false
+
+[functions.notify-admin-sms]
+verify_jwt = false
+
+[functions.ingest-vitals]
+verify_jwt = false
+
+[functions.run-psi]
+verify_jwt = false
+
+[functions.url-migrate]
+verify_jwt = false

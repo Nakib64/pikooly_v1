@@ -1,0 +1,1 @@
+UPDATE site_settings SET value = '৳', updated_at = now() WHERE key = 'currency_symbol';

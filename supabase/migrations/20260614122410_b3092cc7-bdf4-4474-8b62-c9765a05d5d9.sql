@@ -1,0 +1,1 @@
+ALTER TABLE public.blogs ADD COLUMN IF NOT EXISTS gift_category_ids uuid[] DEFAULT '{}'::uuid[];

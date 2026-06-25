@@ -1,0 +1,1 @@
+ALTER TABLE public.offer_banners ADD COLUMN IF NOT EXISTS cta_text text DEFAULT 'Shop Now';

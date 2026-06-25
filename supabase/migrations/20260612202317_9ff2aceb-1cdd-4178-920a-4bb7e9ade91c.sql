@@ -1,0 +1,1 @@
+ALTER TABLE public.cart_addons ADD COLUMN IF NOT EXISTS available_districts text[] NOT NULL DEFAULT '{}';

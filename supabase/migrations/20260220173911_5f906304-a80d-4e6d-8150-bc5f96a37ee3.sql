@@ -1,0 +1,1 @@
+ALTER TABLE public.categories ADD COLUMN show_in_homepage boolean NOT NULL DEFAULT true;

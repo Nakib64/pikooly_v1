@@ -1,0 +1,2 @@
+UPDATE products SET delivery_time = 'Same Day Delivery' WHERE id = 'efa5e4bb-246a-4fad-ae5a-a2f4de1790a7';
+UPDATE products SET delivery_time = 'Next Day Delivery' WHERE id = 'b46c2f27-ce41-45e9-a819-7a5b7922cdb8';

@@ -1,0 +1,4 @@
+UPDATE event_packages SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/event-packages/wedding.jpg' WHERE id = '63f55046-11cd-4614-b489-88eec5960258';
+UPDATE event_packages SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/event-packages/birthday.jpg' WHERE id = '2b74b94a-44d1-4b9e-8676-7f92824dc497';
+UPDATE event_packages SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/event-packages/corporate.jpg' WHERE id = 'b2fc1321-8aef-494f-9135-1ddfcbd15a69';
+UPDATE event_packages SET image_url = 'https://uizdqqyiqxkcjufkksrc.supabase.co/storage/v1/object/public/images/event-packages/anniversary.jpg' WHERE id = '8ddff2b7-c647-4c3c-9eb3-419ed7cc3c5c';

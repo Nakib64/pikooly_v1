@@ -1,0 +1,2 @@
+ALTER TABLE public.delivery_mode_exclusions DROP CONSTRAINT IF EXISTS delivery_mode_exclusions_scope_check;
+ALTER TABLE public.delivery_mode_exclusions ADD CONSTRAINT delivery_mode_exclusions_scope_check CHECK (scope = ANY (ARRAY['product'::text, 'subcategory'::text, 'category'::text]));

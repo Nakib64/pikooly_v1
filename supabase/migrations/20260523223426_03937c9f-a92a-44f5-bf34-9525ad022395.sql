@@ -1,0 +1,1 @@
+ALTER TABLE public.bouquet_flowers ADD COLUMN IF NOT EXISTS colors jsonb NOT NULL DEFAULT '[]'::jsonb;

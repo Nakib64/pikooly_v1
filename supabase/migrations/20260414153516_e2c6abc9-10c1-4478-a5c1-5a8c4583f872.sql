@@ -1,0 +1,1 @@
+ALTER TABLE public.categories ADD COLUMN allow_custom_text boolean NOT NULL DEFAULT false;

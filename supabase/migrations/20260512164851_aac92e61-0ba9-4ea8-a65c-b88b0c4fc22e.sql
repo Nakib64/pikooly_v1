@@ -1,0 +1,1 @@
+ALTER TABLE public.subcategories ADD COLUMN IF NOT EXISTS mega_menu_group TEXT;

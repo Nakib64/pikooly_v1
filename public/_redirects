@@ -1,0 +1,10 @@
+# WordPress to new site 301 redirects (for Netlify/Cloudflare Pages)
+/cart              /checkout          301
+/my-account        /account           301
+/my-account/*      /account           301
+/wp-content/*      /placeholder.svg   301
+/wp-admin          /admin/login       301
+/wp-login.php      /admin/login       301
+
+# SPA fallback
+/*    /index.html   200

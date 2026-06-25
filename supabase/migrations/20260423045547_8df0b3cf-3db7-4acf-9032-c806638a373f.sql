@@ -1,0 +1,1 @@
+UPDATE products SET delivery_time = NULL WHERE id IN ('efa5e4bb-246a-4fad-ae5a-a2f4de1790a7','b46c2f27-ce41-45e9-a819-7a5b7922cdb8');

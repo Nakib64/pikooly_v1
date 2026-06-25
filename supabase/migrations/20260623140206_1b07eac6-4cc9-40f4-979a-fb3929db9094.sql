@@ -1,0 +1,1 @@
+DELETE FROM public.shipping_districts WHERE name IN ('ripon','rakib','rabiya','Uttara','CharFassion','Dhaka City','Dhaka Sub-Urban','Chittagong','Cumilla','Jessore');

@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX delivery_mode_cities_mode_city_thana_key ON public.delivery_mode_cities (mode_id, city_name, COALESCE(thana, ''));

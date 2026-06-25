@@ -1,0 +1,1 @@
+ALTER TABLE public.products ADD COLUMN delivery_time text DEFAULT NULL;

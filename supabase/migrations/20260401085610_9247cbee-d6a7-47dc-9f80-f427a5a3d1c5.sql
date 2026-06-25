@@ -1,0 +1,1 @@
+ALTER TABLE public.offer_banners ADD COLUMN bg_image_url text;
