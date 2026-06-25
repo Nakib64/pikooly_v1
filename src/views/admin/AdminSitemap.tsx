@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Plus, Trash2, Save, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";

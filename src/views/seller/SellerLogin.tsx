@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "@/lib/router-adapter";
 import { z } from "zod";

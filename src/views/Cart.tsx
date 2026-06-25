@@ -1,3 +1,4 @@
+"use client";
 import { Plus, Minus, ShoppingBag, Trash2, ImagePlus, ChevronUp, ReceiptText } from "lucide-react";
 import { useCart, buildVariantKey } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";

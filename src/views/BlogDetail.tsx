@@ -1,3 +1,4 @@
+"use client";
 import { useParams, Link } from "@/lib/router-adapter";
 import { Calendar, ArrowLeft, Clock, Share2, List, ChevronDown, Copy, Check, Facebook, Twitter } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";

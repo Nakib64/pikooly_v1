@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useParams, useNavigate, Link } from "@/lib/router-adapter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";

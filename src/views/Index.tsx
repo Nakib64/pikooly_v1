@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, lazy, Suspense, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import HeroSection from "@/components/home/HeroSection";

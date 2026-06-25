@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Link } from "@/lib/router-adapter";
 import { ChevronRight, Home } from "lucide-react";

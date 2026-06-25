@@ -1,3 +1,4 @@
+"use client";
 import { useState, useMemo, useEffect, useRef, useTransition, lazy, Suspense } from "react";
 import { useSearchParams, useParams, Link } from "@/lib/router-adapter";
 import { ShoppingCart } from "lucide-react";

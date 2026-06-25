@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { useNavigate } from "@/lib/router-adapter";
 import { useAuth } from "@/contexts/AuthContext";

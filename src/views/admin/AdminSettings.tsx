@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import SendTestNotificationCard from "@/components/admin/SendTestNotificationCard";

@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Phone, Globe, Heart, Truck, ShieldCheck, Leaf, Star, Users, Target, Gift } from "lucide-react";

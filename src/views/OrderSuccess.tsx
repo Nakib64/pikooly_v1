@@ -1,3 +1,4 @@
+"use client";
 import { useParams, Link, useSearchParams } from "@/lib/router-adapter";
 import { Button } from "@/components/ui/button";
 import { Home, Phone, Mail, PartyPopper, CircleCheckBig, Package, Truck, CheckCircle, Clock, XCircle, Loader2 } from "lucide-react";

@@ -1,3 +1,4 @@
+"use client";
 import PolicyPage from "./PolicyPage";
 
 const defaultContent = `

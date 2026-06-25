@@ -1,3 +1,4 @@
+"use client";
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Phone, Mail, MapPin, MessageCircle, Globe, Clock } from "lucide-react";

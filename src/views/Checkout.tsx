@@ -1,3 +1,4 @@
+"use client";
 import { useState, useMemo, useEffect } from "react";
 import { BD_DISTRICTS_THANAS } from "@/data/bdDistrictsThanas";
 import paymentMethodsImg from "@/assets/payment-methods.webp";

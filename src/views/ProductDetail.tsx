@@ -1,3 +1,4 @@
+"use client";
 import { useParams, Link, useNavigate } from "@/lib/router-adapter";
 import SEOHead from "@/components/seo/SEOHead";
 import { toast } from "sonner";

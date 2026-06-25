@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "@/lib/router-adapter";
 import SEOHead from "@/components/seo/SEOHead";

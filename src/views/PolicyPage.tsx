@@ -1,3 +1,4 @@
+"use client";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import SEOHead from "@/components/seo/SEOHead";
 

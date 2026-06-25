@@ -1,3 +1,4 @@
+"use client";
 import { useState, useRef, useEffect, useCallback, useMemo, ReactNode } from "react";
 import { useNavigate } from "@/lib/router-adapter";
 import { Search, ArrowLeft, X, Clock, TrendingUp, ArrowUpRight, Mic, Sparkles, Loader2 } from "lucide-react";

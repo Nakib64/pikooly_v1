@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useNavigate } from "@/lib/router-adapter";
 import { supabase } from "@/integrations/supabase/client";

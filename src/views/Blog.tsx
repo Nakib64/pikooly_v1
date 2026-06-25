@@ -1,3 +1,4 @@
+"use client";
 import { useState, useMemo, useRef, useEffect, Fragment } from "react";
 import { Calendar, ArrowRight, Clock, Search, X, ChevronRight, Play, Pause, ChevronDown, Menu, Home, Gift, ShoppingBag, Flower2, Phone } from "lucide-react";
 import { Link, useParams, useNavigate, useSearchParams } from "@/lib/router-adapter";
