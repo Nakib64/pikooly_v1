@@ -60,7 +60,7 @@ const Index = () => {
   const seoTitle = settings.homepage_seo_title || settings.site_title || "Pikooly";
   const seoDesc = settings.homepage_meta_description || "Fresh flowers, gifts, and cakes delivered across Bangladesh.";
   const siteName = settings.store_name || settings.site_title || "Pikooly";
-  const siteUrl = window.location.origin;
+  const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://pikooly.com.bd";
 
   const combinedJsonLd = useMemo(() => ({
     "@context": "https://schema.org",

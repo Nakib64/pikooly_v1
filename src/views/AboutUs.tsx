@@ -95,12 +95,12 @@ const AboutUs = () => {
       <SEOHead
         title={`About Us — ${s("site_title", "Pikooly")}`}
         description={heroSubtitle}
-        canonical={`${window.location.origin}/about-us`}
+        canonical={typeof window !== "undefined" ? `${window.location.origin}/about-us` : undefined}
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "AboutPage",
           name: "About Pikooly",
-          url: `${window.location.origin}/about-us`,
+          url: typeof window !== "undefined" ? `${window.location.origin}/about-us` : "https://pikooly.com.bd/about-us",
           description: heroSubtitle,
         }}
       />

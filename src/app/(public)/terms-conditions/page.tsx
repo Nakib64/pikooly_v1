@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const TermsConditions = dynamic(() => import("@/views/TermsConditions"), { ssr: false });
+import TermsConditions from "@/views/TermsConditions";
 export default function Page() {
   return (
     <Suspense fallback={null}>

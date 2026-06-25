@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const AdminSitemap = dynamic(() => import("@/views/admin/AdminSitemap"), { ssr: false });
+import AdminSitemap from "@/views/admin/AdminSitemap";
 export default function Page() {
   return (
     <Suspense fallback={null}>

@@ -206,7 +206,7 @@ const BlogDetail = () => {
   });
 
   const siteName = settings.site_title || "Pikooly";
-  const siteUrl = window.location.origin;
+  const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://pikooly.com.bd";
   const seoTitle = post ? (post.seo_title || `${post.title} - ${siteName}`) : siteName;
   const seoDesc = post ? (post.seo_description || post.excerpt || "") : "";
 

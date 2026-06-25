@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const AdminBouquet = dynamic(() => import("@/views/admin/AdminBouquet"), { ssr: false });
+import AdminBouquet from "@/views/admin/AdminBouquet";
 export default function Page() {
   return (
     <Suspense fallback={null}>

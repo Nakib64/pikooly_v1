@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const PrivacyPolicy = dynamic(() => import("@/views/PrivacyPolicy"), { ssr: false });
+import PrivacyPolicy from "@/views/PrivacyPolicy";
 export default function Page() {
   return (
     <Suspense fallback={null}>

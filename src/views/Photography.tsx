@@ -152,7 +152,7 @@ const Photography = () => {
     setAddress("");
   };
 
-  const siteUrl = window.location.origin;
+  const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://pikooly.com.bd";
   const seoTitle = settings.photo_seo_title || "Photography & Videography Services — Pikooly";
   const seoDescription = settings.photo_seo_description || "Professional photography, cinematic videography, and surprise gift combos in Bangladesh. Book now starting from ৳2,000.";
   const heroTitle = settings.photo_hero_title || "Capture Your <span class='text-primary'>Moments</span>";

@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const AdminPopularGifting = dynamic(() => import("@/views/admin/AdminPopularGifting"), { ssr: false });
+import AdminPopularGifting from "@/views/admin/AdminPopularGifting";
 export default function Page() {
   return (
     <Suspense fallback={null}>

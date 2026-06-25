@@ -39,7 +39,7 @@ const ResetPassword = () => {
   const canSubmit = !loading && strength.score >= 3 && strength.checks.length && passwordsMatch;
 
   useEffect(() => {
-    const hash = window.location.hash;
+    const hash = typeof window !== "undefined" ? window.location.hash : "";
     const params = new URLSearchParams(hash.startsWith("#") ? hash.slice(1) : hash);
     const errorCode = params.get("error_code") || params.get("error");
     const errorDesc = params.get("error_description");

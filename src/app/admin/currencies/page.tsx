@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const AdminCurrencies = dynamic(() => import("@/views/admin/AdminCurrencies"), { ssr: false });
+import AdminCurrencies from "@/views/admin/AdminCurrencies";
 export default function Page() {
   return (
     <Suspense fallback={null}>

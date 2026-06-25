@@ -81,7 +81,7 @@ const Affiliate = () => {
 
   const referralUrl = useMemo(() => {
     if (!affiliate?.code) return "";
-    return `${window.location.origin}/?ref=${affiliate.code}`;
+    return typeof window !== "undefined" ? `${window.location.origin}/?ref=${affiliate.code}` : "";
   }, [affiliate?.code]);
 
   const copyLink = () => {

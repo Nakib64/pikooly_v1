@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const RefundPolicy = dynamic(() => import("@/views/RefundPolicy"), { ssr: false });
+import RefundPolicy from "@/views/RefundPolicy";
 export default function Page() {
   return (
     <Suspense fallback={null}>

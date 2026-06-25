@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const SellerPayouts = dynamic(() => import("@/views/seller/SellerPayouts"), { ssr: false });
+import SellerPayouts from "@/views/seller/SellerPayouts";
 export default function Page() {
   return (
     <Suspense fallback={null}>

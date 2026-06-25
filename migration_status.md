@@ -64,10 +64,16 @@
   - Created `/auth/callback` page to properly process Supabase OAuth redirects.
   - Validated next-pwa production service worker (`public/sw.js`) and verified it compiles perfectly in the production build.
 
+- **Phase 12 – Typical Next.js Static Import Refactoring**
+  - Refactored all 80 route pages under `src/app/` from lazy dynamic client-only imports (`ssr: false`) to typical Next.js static imports.
+  - Patched 22 expressions across 15 view files to guard browser-only globals (like `window.location`) under a pre-rendering context (`typeof window !== "undefined"`).
+  - verified that the site compiles successfully and pre-renders actual DOM layouts, reducing skeleton HTML bundle size and providing massive SEO advantages.
+
 ## Pending ✅
 
 *No pending items. The Next.js 15 migration is complete!*
 
 ## Next Immediate Step
 Deploy the application to Vercel (or your chosen host), configure the `NEXT_PUBLIC_SITE_URL` env variable to match your custom domain, and perform final staging QA checks on the checkout and auth flows.
+
 

@@ -197,7 +197,7 @@ const Events = () => {
     "@type": "EventPlanning",
     name: "Pikooly Event Management",
     description: "Professional event management services in Bangladesh - Wedding, Birthday, Corporate events",
-    url: `${window.location.origin}/events`,
+    url: typeof window !== "undefined" ? `${window.location.origin}/events` : "https://pikooly.com.bd/events",
     areaServed: { "@type": "Country", name: "Bangladesh" },
     serviceType: categories.map((c: any) => c.name),
     hasOfferCatalog: {
@@ -240,8 +240,8 @@ const Events = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: window.location.origin },
-      { "@type": "ListItem", position: 2, name: "Events", item: `${window.location.origin}/events` },
+      { "@type": "ListItem", position: 1, name: "Home", item: typeof window !== "undefined" ? window.location.origin : "https://pikooly.com.bd" },
+      { "@type": "ListItem", position: 2, name: "Events", item: typeof window !== "undefined" ? `${window.location.origin}/events` : "https://pikooly.com.bd/events" },
     ],
   }), []);
 
@@ -255,7 +255,7 @@ const Events = () => {
       <SEOHead
         title={seoTitle.slice(0, 60)}
         description={seoDescription.slice(0, 160)}
-        canonical={`${window.location.origin}/events`}
+        canonical={typeof window !== "undefined" ? `${window.location.origin}/events` : undefined}
         jsonLd={jsonLd}
         ogImage={settings.events_og_image}
       />

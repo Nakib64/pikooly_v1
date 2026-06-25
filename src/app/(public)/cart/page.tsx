@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const Cart = dynamic(() => import("@/views/Cart"), { ssr: false });
+import Cart from "@/views/Cart";
 export default function Page() {
   return (
     <Suspense fallback={null}>

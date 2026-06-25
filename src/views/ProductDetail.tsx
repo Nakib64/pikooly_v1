@@ -267,7 +267,7 @@ const ProductDetail = () => {
   const siteName = settings.site_title || "Pikooly";
   const seoTitle = product ? ((product as any).seo_title || `${product.name} - ${siteName}`) : siteName;
   const seoDesc = product ? stripHtml((product as any).seo_description || product.description || "").slice(0, 160) : "";
-  const siteUrl = window.location.origin;
+  const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://pikooly.com.bd";
 
   // Fetch approved reviews for Review schema
   const { data: reviewsData = [] } = useQuery({

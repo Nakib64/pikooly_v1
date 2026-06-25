@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const Checkout = dynamic(() => import("@/views/Checkout"), { ssr: false });
+import Checkout from "@/views/Checkout";
 export default function Page() {
   return (
     <Suspense fallback={null}>

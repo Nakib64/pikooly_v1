@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const BouquetBuilder = dynamic(() => import("@/views/BouquetBuilder"), { ssr: false });
+import BouquetBuilder from "@/views/BouquetBuilder";
 export default function Page() {
   return (
     <Suspense fallback={null}>

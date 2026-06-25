@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const AdminDashboard = dynamic(() => import("@/views/AdminDashboard"), { ssr: false });
+import AdminDashboard from "@/views/AdminDashboard";
 export default function Page() {
   return (
     <Suspense fallback={null}>

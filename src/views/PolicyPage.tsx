@@ -20,7 +20,7 @@ const PolicyPage = ({ prefix, defaultTitle, defaultSubtitle, defaultContent, pat
       <SEOHead
         title={`${title} — ${settings.site_title || "Pikooly"}`}
         description={subtitle}
-        canonical={`${window.location.origin}${path}`}
+        canonical={typeof window !== "undefined" ? `${window.location.origin}${path}` : undefined}
       />
       <section className="relative bg-gradient-to-br from-primary/10 via-background to-primary/5 overflow-hidden">
         <div className="section-container page-section-hero">

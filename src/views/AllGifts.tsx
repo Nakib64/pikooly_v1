@@ -59,7 +59,7 @@ const AllGifts = () => {
       <SEOHead
         title="All Gifts — Pikooly"
         description="Browse all gift categories and occasions. Find the perfect gift for every celebration at Pikooly."
-        canonical={`${window.location.origin}/all-gifts`}
+        canonical={typeof window !== "undefined" ? `${window.location.origin}/all-gifts` : undefined}
       />
       <nav aria-label="Breadcrumb" className="mb-3 text-xs sm:text-sm text-muted-foreground">
         <ol className="flex items-center flex-wrap gap-1">

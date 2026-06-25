@@ -566,7 +566,7 @@ const BouquetBuilder = () => {
     "description": settings.bouquet_seo_jsonld_description || "Design your own custom flower bouquet online. Choose from fresh roses, lilies, sunflowers & more.",
     "provider": { "@type": "Organization", "name": settings.store_name || "Pikooly" },
     "areaServed": "Bangladesh",
-    "url": `${window.location.origin}/${seoSlug.replace(/^\//, "")}`
+    "url": typeof window !== "undefined" ? `${window.location.origin}/${seoSlug.replace(/^\//, "")}` : ""
   };
 
   return (
@@ -574,7 +574,7 @@ const BouquetBuilder = () => {
       <SEOHead
         title={seoTitle}
         description={seoDescription}
-        canonical={`${window.location.origin}/custom-bouquet`}
+        canonical={typeof window !== "undefined" ? `${window.location.origin}/custom-bouquet` : undefined}
         ogType="product"
         ogImage={seoOgImage}
         jsonLd={seoJsonLd}

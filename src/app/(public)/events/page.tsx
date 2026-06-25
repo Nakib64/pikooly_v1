@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const Events = dynamic(() => import("@/views/Events"), { ssr: false });
+import Events from "@/views/Events";
 export default function Page() {
   return (
     <Suspense fallback={null}>

@@ -155,7 +155,7 @@ const Shop = () => {
 
   useEffect(() => {
     const siteName = settings.store_name || settings.site_title || "Pikooly";
-    const siteUrl = window.location.origin;
+    const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://pikooly.com.bd";
     const contentName = (activeContent as any)?.name;
     const seoTitle = (activeContent as any)?.seo_title;
     const metaDesc = (activeContent as any)?.description || (activeContent as any)?.short_description || "";

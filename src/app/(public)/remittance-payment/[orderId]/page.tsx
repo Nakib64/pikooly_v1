@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const RemittancePayment = dynamic(() => import("@/views/RemittancePayment"), { ssr: false });
+import RemittancePayment from "@/views/RemittancePayment";
 export default function Page() {
   return (
     <Suspense fallback={null}>

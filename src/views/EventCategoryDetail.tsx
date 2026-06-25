@@ -144,7 +144,7 @@ const EventCategoryDetail = () => {
   const siteName = settings.store_name || settings.site_title || "Pikooly";
   const seoTitle = category?.seo_title || `${category?.name || "Event"} Archives - ${siteName}`;
   const seoDesc = category?.seo_description || category?.short_description || `${category?.name || "Event"} Archives - ${siteName}`;
-  const canonical = `${window.location.origin}/events/${slug}`;
+  const canonical = typeof window !== "undefined" ? `${window.location.origin}/events/${slug}` : `https://pikooly.com.bd/events/${slug}`;
 
   const jsonLd = useMemo(() => {
     if (!category) return undefined;
@@ -157,7 +157,7 @@ const EventCategoryDetail = () => {
       provider: {
         "@type": "Organization",
         name: "Pikooly",
-        url: window.location.origin,
+        url: typeof window !== "undefined" ? window.location.origin : "https://pikooly.com.bd",
       },
       areaServed: { "@type": "Country", name: "Bangladesh" },
       ...(packages.length > 0 && {

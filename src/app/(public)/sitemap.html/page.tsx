@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const Sitemap = dynamic(() => import("@/views/Sitemap"), { ssr: false });
+import Sitemap from "@/views/Sitemap";
 export default function Page() {
   return (
     <Suspense fallback={null}>

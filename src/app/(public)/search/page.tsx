@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const Search = dynamic(() => import("@/views/Search"), { ssr: false });
+import Search from "@/views/Search";
 export default function Page() {
   return (
     <Suspense fallback={null}>

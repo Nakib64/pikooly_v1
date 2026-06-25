@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const EpsCallback = dynamic(() => import("@/views/EpsCallback"), { ssr: false });
+import EpsCallback from "@/views/EpsCallback";
 export default function Page() {
   return (
     <Suspense fallback={null}>

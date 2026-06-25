@@ -59,12 +59,12 @@ const ContactUs = () => {
       <SEOHead
         title={`Contact Us — ${s("site_title", "Pikooly")}`}
         description={heroSubtitle}
-        canonical={`${window.location.origin}/contact-us`}
+        canonical={typeof window !== "undefined" ? `${window.location.origin}/contact-us` : undefined}
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "ContactPage",
           name: "Contact Pikooly",
-          url: `${window.location.origin}/contact-us`,
+          url: typeof window !== "undefined" ? `${window.location.origin}/contact-us` : "https://pikooly.com.bd/contact-us",
           description: heroSubtitle,
         }}
       />

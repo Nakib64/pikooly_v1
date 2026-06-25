@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const AdminActivityLog = dynamic(() => import("@/views/admin/AdminActivityLog"), { ssr: false });
+import AdminActivityLog from "@/views/admin/AdminActivityLog";
 export default function Page() {
   return (
     <Suspense fallback={null}>

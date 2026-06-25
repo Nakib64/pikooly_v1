@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const AdminLogin = dynamic(() => import("@/views/AdminLogin"), { ssr: false });
+import AdminLogin from "@/views/AdminLogin";
 export default function Page() {
   return (
     <Suspense fallback={null}>

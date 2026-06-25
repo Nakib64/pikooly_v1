@@ -1,7 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
-const TrackOrder = dynamic(() => import("@/views/TrackOrder"), { ssr: false });
+import TrackOrder from "@/views/TrackOrder";
 export default function Page() {
   return (
     <Suspense fallback={null}>
