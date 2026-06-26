@@ -43,15 +43,15 @@ const enc = new TextEncoder();
 
 async function sha256Hex(data: ArrayBuffer | Uint8Array | string): Promise<string> {
   const buf = typeof data === "string" ? enc.encode(data) : data;
-  const hash = await crypto.subtle.digest("SHA-256", buf);
+  const hash = await crypto.subtle.digest("SHA-256", buf as any);
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
 async function hmac(key: ArrayBuffer | Uint8Array, msg: string): Promise<ArrayBuffer> {
   const cryptoKey = await crypto.subtle.importKey(
-    "raw", key, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
+    "raw", key as any, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
   );
-  return crypto.subtle.sign("HMAC", cryptoKey, enc.encode(msg));
+  return crypto.subtle.sign("HMAC", cryptoKey, enc.encode(msg) as any);
 }
 
 async function signingKey(secret: string, date: string, region: string, service: string): Promise<ArrayBuffer> {
@@ -149,6 +149,42 @@ export async function uploadRemoteToR2(
     // Derive filename
     let name = filenameHint || sourceUrl.split("/").pop()?.split("?")[0] || `${Date.now()}.bin`;
     name = name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120);
+    if (!/\.[a-z0-9]{2,5}$/i.test(name)) {
+      const ext = contentType.split("/")[1]?.split(";")[0] || "bin";
+      name = `${name}.${ext}`;
+    }
+    const key = `${folder.replace(/^\/+|\/+$/g, "")}/${Date.now()}-${name}`;
+
+    const res = await r2Request({ cfg, method: "PUT", key, body: bytes, contentType });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      return { ok: false, error: `R2 PUT ${res.status}: ${errText.slice(0, 200)}` };
+    }
+    await res.body?.cancel().catch(() => {});
+
+    const publicBase = (cfg.publicUrl || "").replace(/\/+$/, "");
+    const url = publicBase
+      ? `${publicBase}/${key}`
+      : `${cfg.endpoint}/${cfg.bucket}/${key}`;
+    return { ok: true, url };
+  } catch (e: any) {
+    return { ok: false, error: e?.message || String(e) };
+  }
+}
+
+/** Upload a file (Uint8Array) directly to R2. Returns the public URL on success or error on failure. */
+export async function uploadBytesToR2(
+  cfg: R2Config,
+  bytes: Uint8Array,
+  folder: string,
+  filename: string,
+  contentType: string,
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  try {
+    if (!r2HasCreds(cfg)) return { ok: false, error: "R2 credentials not configured" };
+
+    // Derive key
+    let name = filename.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120);
     if (!/\.[a-z0-9]{2,5}$/i.test(name)) {
       const ext = contentType.split("/")[1]?.split(";")[0] || "bin";
       name = `${name}.${ext}`;

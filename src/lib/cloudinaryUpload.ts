@@ -31,13 +31,13 @@ export async function uploadToCloudinary(
   formData.append("folder", folder);
   formData.append("resource_type", resourceType);
 
-  const { data, error } = await supabase.functions.invoke("cloudinary-upload", {
+  const { data, error } = await supabase.functions.invoke("r2-upload", {
     body: formData,
   });
 
   if (error) throw error;
-  if (!data || data.error) throw new Error(data?.error || "Cloudinary upload failed");
-  if (!data.url) throw new Error("Cloudinary upload returned no URL");
+  if (!data || data.error) throw new Error(data?.error || "Upload failed");
+  if (!data.url) throw new Error("Upload returned no URL");
 
   return data as CloudinaryUploadResult;
 }

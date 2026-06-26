@@ -47,7 +47,7 @@ export function CloudinaryUpload({
       formData.append("folder", folder);
       formData.append("resource_type", resourceType);
 
-      const { data, error } = await supabase.functions.invoke("cloudinary-upload", {
+      const { data, error } = await supabase.functions.invoke("r2-upload", {
         body: formData,
       });
 
@@ -59,7 +59,7 @@ export function CloudinaryUpload({
       onChange(url);
       toast.success("Uploaded successfully!");
     } catch (err: any) {
-      console.error("Cloudinary upload error:", err);
+      console.error("Upload error:", err);
       toast.error(err.message || "Upload failed");
     } finally {
       setUploading(false);
@@ -183,7 +183,7 @@ export function CloudinaryMultiUpload({
         formData.append("folder", folder);
         formData.append("resource_type", resourceType);
 
-        const { data, error } = await supabase.functions.invoke("cloudinary-upload", {
+        const { data, error } = await supabase.functions.invoke("r2-upload", {
           body: formData,
         });
 
