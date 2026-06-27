@@ -1,4 +1,4 @@
-import { Navigate, Link } from "@/lib/router-adapter";
+import { Navigate, Link, useLocation } from "@/lib/router-adapter";
 import { ReactNode } from "react";
 import { useSeller } from "@/hooks/useSeller";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,6 +8,11 @@ import { Button } from "@/components/ui/button";
 const ProtectedSellerRoute = ({ children }: { children: ReactNode }) => {
   const { user, loading: authLoading } = useAuth();
   const { seller, loading } = useSeller();
+  const location = useLocation();
+
+  if (location.pathname === "/seller/login" || location.pathname === "/seller/signup") {
+    return <>{children}</>;
+  }
 
   if (authLoading || loading) {
     return (

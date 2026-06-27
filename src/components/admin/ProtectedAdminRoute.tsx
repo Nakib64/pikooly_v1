@@ -1,9 +1,14 @@
-import { Navigate } from "@/lib/router-adapter";
+import { Navigate, useLocation } from "@/lib/router-adapter";
 import { useAuth } from "@/contexts/AuthContext";
 import AdminLayout from "./AdminLayout";
 
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isAdmin, loading } = useAuth();
+  const location = useLocation();
+
+  if (location.pathname === "/admin/login") {
+    return <>{children}</>;
+  }
 
   if (loading) {
     return (
