@@ -13,7 +13,11 @@ import { Plus, Pencil, Trash2, Package, Tag, CalendarCheck, Search, PlusCircle, 
 import { CloudinaryUpload } from "@/components/admin/CloudinaryUpload";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import RichTextEditor from "@/components/admin/RichTextEditor";
+import dynamic from "next/dynamic";
+const RichTextEditor = dynamic(() => import("@/components/admin/RichTextEditor"), {
+  ssr: false,
+  loading: () => <div className="border rounded-lg min-h-[90px] sm:min-h-[140px] bg-muted/10 animate-pulse" />
+});
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import PageContentEditor from "@/components/admin/PageContentEditor";
@@ -179,11 +183,11 @@ const CategoriesTab = () => {
               <div className="mt-2 space-y-3">
                 <div>
                   <Label className="text-sm">Short Description</Label>
-                  <RichTextEditor value={form.short_description} onChange={v => setForm(p => ({ ...p, short_description: v }))} />
+                  {showForm && <RichTextEditor value={form.short_description} onChange={v => setForm(p => ({ ...p, short_description: v }))} />}
                 </div>
                 <div>
                   <Label className="text-sm">Long Description</Label>
-                  <RichTextEditor value={form.long_description} onChange={v => setForm(p => ({ ...p, long_description: v }))} />
+                  {showForm && <RichTextEditor value={form.long_description} onChange={v => setForm(p => ({ ...p, long_description: v }))} />}
                 </div>
               </div>
             </div>

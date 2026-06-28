@@ -68,11 +68,10 @@ const pwaConfig = withPWA({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   eslint: {
     ignoreDuringBuilds: true,
   },
-  outputFileTracingRoot: process.cwd(),
   // Allow cross-origin image loading from known domains
   images: {
     remotePatterns: [

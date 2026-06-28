@@ -9,31 +9,35 @@ import { supabase } from "@/integrations/supabase/client";
  * non-admin account in another tab.
  */
 export const ensureAdminSession = async (): Promise<string | null> => {
-  // 1. Refresh the session so auth.uid() is valid in Postgres RLS.
-  const { data: refreshData, error: refreshErr } = await supabase.auth.refreshSession();
-  const session = refreshData.session ?? (await supabase.auth.getSession()).data.session;
+  try {
+    // 1. Get the current session (refreshes automatically if expired).
+    const { data: { session }, error: sessionErr } = await supabase.auth.getSession();
 
-  if (refreshErr && !session) {
-    return "Your session expired. Please log out and log back in.";
-  }
-  if (!session?.user) {
-    return "You are not signed in. Please log in as an admin and try again.";
-  }
+    if (sessionErr) {
+      return `Could not retrieve session: ${sessionErr.message}`;
+    }
+    if (!session?.user) {
+      return "You are not signed in. Please log in as an admin and try again.";
+    }
 
-  // 2. Verify the role on the server (bypasses any stale client state).
-  const { data: roleRow, error: roleErr } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", session.user.id)
-    .eq("role", "admin")
-    .maybeSingle();
+    // 2. Verify the role on the server (bypasses any stale client state).
+    const { data: roleRow, error: roleErr } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", session.user.id)
+      .eq("role", "admin")
+      .maybeSingle();
 
-  if (roleErr) {
-    return `Could not verify admin role: ${roleErr.message}`;
-  }
-  if (!roleRow) {
-    return `The account "${session.user.email}" is not an admin. Please sign in with an admin account.`;
-  }
+    if (roleErr) {
+      return `Could not verify admin role: ${roleErr.message}`;
+    }
+    if (!roleRow) {
+      return `The account "${session.user.email}" is not an admin. Please sign in with an admin account.`;
+    }
 
-  return null;
+    return null;
+  } catch (err: any) {
+    console.error("Admin session verification failed:", err);
+    return `Session verification failed: ${err?.message || err}`;
+  }
 };

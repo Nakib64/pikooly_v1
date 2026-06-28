@@ -1,6 +1,10 @@
 "use client";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import RichTextEditor from "@/components/admin/RichTextEditor";
+import dynamic from "next/dynamic";
+const RichTextEditor = dynamic(() => import("@/components/admin/RichTextEditor"), {
+  ssr: false,
+  loading: () => <div className="border rounded-lg min-h-[90px] sm:min-h-[140px] bg-muted/10 animate-pulse" />
+});
 import SendTestNotificationCard from "@/components/admin/SendTestNotificationCard";
 import MigrateStorageButton from "@/components/admin/MigrateStorageButton";
 import TestR2ConnectionButton from "@/components/admin/TestR2ConnectionButton";

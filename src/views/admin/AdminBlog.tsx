@@ -14,7 +14,11 @@ import { toast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2, Eye, EyeOff, X, Sparkles, Loader2, Check } from "lucide-react";
 import { CloudinaryUpload } from "@/components/admin/CloudinaryUpload";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import RichTextEditor from "@/components/admin/RichTextEditor";
+import dynamic from "next/dynamic";
+const RichTextEditor = dynamic(() => import("@/components/admin/RichTextEditor"), {
+  ssr: false,
+  loading: () => <div className="border rounded-lg min-h-[90px] sm:min-h-[140px] bg-muted/10 animate-pulse" />
+});
 import type { Tables } from "@/integrations/supabase/types";
 
 type Blog = Tables<"blogs">;
@@ -504,7 +508,7 @@ const AdminBlog = () => {
               </div>
               <div className="space-y-2">
                 <Label>Content</Label>
-                <RichTextEditor value={form.content} onChange={(html) => setForm({ ...form, content: html })} />
+                {dialogOpen && <RichTextEditor value={form.content} onChange={(html) => setForm({ ...form, content: html })} />}
               </div>
               <div className="space-y-2">
                 <Label>Cover Image</Label>

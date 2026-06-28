@@ -7,7 +7,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { CloudinaryUpload } from "@/components/admin/CloudinaryUpload";
-import RichTextEditor from "@/components/admin/RichTextEditor";
+import dynamic from "next/dynamic";
+const RichTextEditor = dynamic(() => import("@/components/admin/RichTextEditor"), {
+  ssr: false,
+  loading: () => <div className="border rounded-lg min-h-[90px] sm:min-h-[140px] bg-muted/10 animate-pulse" />
+});
 import { toast } from "sonner";
 import { FileText, Search, MessageSquare, Save, PlusCircle, Trash2 } from "lucide-react";
 

@@ -14,7 +14,11 @@ import { Plus, Pencil, Trash2, GripVertical, PlusCircle, MinusCircle, ChevronDow
 import { CloudinaryUpload } from "@/components/admin/CloudinaryUpload";
 import { ensureAdminSession } from "@/lib/ensureAdmin";
 import type { Tables } from "@/integrations/supabase/types";
-import RichTextEditor from "@/components/admin/RichTextEditor";
+import dynamic from "next/dynamic";
+const RichTextEditor = dynamic(() => import("@/components/admin/RichTextEditor"), {
+  ssr: false,
+  loading: () => <div className="border rounded-lg min-h-[90px] sm:min-h-[140px] bg-muted/10 animate-pulse" />
+});
 import DeliveryExclusionsManager from "@/components/admin/DeliveryExclusionsManager";
 
 type Category = Tables<"categories">;
@@ -119,39 +123,49 @@ const AdminCategories = () => {
     if (!form.name.trim()) return;
     setSaving(true);
 
-    const authErr = await ensureAdminSession();
-    if (authErr) {
-      toast({ title: "Permission denied", description: authErr, variant: "destructive" });
+    try {
+      const authErr = await ensureAdminSession();
+      if (authErr) {
+        toast({ title: "Permission denied", description: authErr, variant: "destructive" });
+        setSaving(false);
+        return;
+      }
+
+      let imageUrl = form.image_url;
+      if (imageFile) {
+        const uploaded = await uploadImage(imageFile, "categories");
+        if (uploaded) imageUrl = uploaded;
+      }
+
+      const slug = form.slug || generateSlug(form.name);
+      let parsedFaq: any[] = [];
+      try { parsedFaq = JSON.parse(form.faq); } catch { parsedFaq = []; }
+      const primaryType = form.category_types[0] || "category";
+      const payload = { name: form.name.trim(), slug, description: form.description || null, short_description: form.short_description || null, long_description: form.long_description || null, faq: parsedFaq, image_url: imageUrl || null, is_active: form.is_active, show_in_homepage: form.show_in_homepage, show_in_header: form.show_in_header, display_order: form.display_order, seo_title: form.seo_title || null, category_type: primaryType, category_types: form.category_types, allow_custom_image: form.allow_custom_image, allow_custom_text: form.allow_custom_text, show_cart_addons: form.show_cart_addons, cod_enabled: form.cod_enabled, hide_delivery_datetime: form.hide_delivery_datetime } as any;
+
+      if (editing) {
+        const { error } = await supabase.from("categories").update(payload).eq("id", editing.id);
+        if (error) throw error;
+        toast({ title: "Category updated" });
+      } else {
+        const { error } = await supabase.from("categories").insert(payload);
+        if (error) throw error;
+        toast({ title: "Category created" });
+      }
+
+      setDialogOpen(false);
+      resetForm();
+      fetchCategories();
+    } catch (err: any) {
+      console.error("Failed to save category:", err);
+      toast({
+        title: "Error saving category",
+        description: err?.message || "An unexpected error occurred while saving the category.",
+        variant: "destructive"
+      });
+    } finally {
       setSaving(false);
-      return;
     }
-
-    let imageUrl = form.image_url;
-    if (imageFile) {
-      const uploaded = await uploadImage(imageFile, "categories");
-      if (uploaded) imageUrl = uploaded;
-    }
-
-    const slug = form.slug || generateSlug(form.name);
-    let parsedFaq: any[] = [];
-    try { parsedFaq = JSON.parse(form.faq); } catch { parsedFaq = []; }
-    const primaryType = form.category_types[0] || "category";
-    const payload = { name: form.name.trim(), slug, description: form.description || null, short_description: form.short_description || null, long_description: form.long_description || null, faq: parsedFaq, image_url: imageUrl || null, is_active: form.is_active, show_in_homepage: form.show_in_homepage, show_in_header: form.show_in_header, display_order: form.display_order, seo_title: form.seo_title || null, category_type: primaryType, category_types: form.category_types, allow_custom_image: form.allow_custom_image, allow_custom_text: form.allow_custom_text, show_cart_addons: form.show_cart_addons, cod_enabled: form.cod_enabled, hide_delivery_datetime: form.hide_delivery_datetime } as any;
-
-    if (editing) {
-      const { error } = await supabase.from("categories").update(payload).eq("id", editing.id);
-      if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-      else toast({ title: "Category updated" });
-    } else {
-      const { error } = await supabase.from("categories").insert(payload);
-      if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-      else toast({ title: "Category created" });
-    }
-
-    setSaving(false);
-    setDialogOpen(false);
-    resetForm();
-    fetchCategories();
   };
 
   const handleDelete = async (id: string) => {
@@ -180,31 +194,41 @@ const AdminCategories = () => {
     if (!subForm.name.trim() || !subForm.category_id) return;
     setSavingSub(true);
 
-    let imageUrl = subForm.image_url;
-    if (subImageFile) {
-      const uploaded = await uploadImage(subImageFile, "subcategories");
-      if (uploaded) imageUrl = uploaded;
+    try {
+      let imageUrl = subForm.image_url;
+      if (subImageFile) {
+        const uploaded = await uploadImage(subImageFile, "subcategories");
+        if (uploaded) imageUrl = uploaded;
+      }
+
+      const slug = subForm.slug || generateSlug(subForm.name);
+      let parsedSubFaq: any[] = [];
+      try { parsedSubFaq = JSON.parse(subForm.faq); } catch { parsedSubFaq = []; }
+      const payload = { name: subForm.name.trim(), slug, description: subForm.description || null, image_url: imageUrl || null, is_active: subForm.is_active, display_order: subForm.display_order, category_id: subForm.category_id, seo_title: subForm.seo_title || null, short_description: subForm.short_description || null, long_description: subForm.long_description || null, faq: parsedSubFaq, show_in_tailored: subForm.show_in_tailored, show_in_shop_by_category: subForm.show_in_shop_by_category, mega_menu_group: subForm.mega_menu_group?.trim() || null, show_cart_addons: subForm.show_cart_addons, cod_enabled: subForm.cod_enabled, hide_delivery_datetime: subForm.hide_delivery_datetime, category_types: subForm.category_types } as any;
+
+      if (editingSub) {
+        const { error } = await supabase.from("subcategories").update(payload).eq("id", editingSub.id);
+        if (error) throw error;
+        toast({ title: "Subcategory updated" });
+      } else {
+        const { error } = await supabase.from("subcategories").insert(payload);
+        if (error) throw error;
+        toast({ title: "Subcategory created" });
+      }
+
+      setSubDialogOpen(false);
+      resetSubForm();
+      fetchCategories();
+    } catch (err: any) {
+      console.error("Failed to save subcategory:", err);
+      toast({
+        title: "Error saving subcategory",
+        description: err?.message || "An unexpected error occurred while saving the subcategory.",
+        variant: "destructive"
+      });
+    } finally {
+      setSavingSub(false);
     }
-
-    const slug = subForm.slug || generateSlug(subForm.name);
-    let parsedSubFaq: any[] = [];
-    try { parsedSubFaq = JSON.parse(subForm.faq); } catch { parsedSubFaq = []; }
-    const payload = { name: subForm.name.trim(), slug, description: subForm.description || null, image_url: imageUrl || null, is_active: subForm.is_active, display_order: subForm.display_order, category_id: subForm.category_id, seo_title: subForm.seo_title || null, short_description: subForm.short_description || null, long_description: subForm.long_description || null, faq: parsedSubFaq, show_in_tailored: subForm.show_in_tailored, show_in_shop_by_category: subForm.show_in_shop_by_category, mega_menu_group: subForm.mega_menu_group?.trim() || null, show_cart_addons: subForm.show_cart_addons, cod_enabled: subForm.cod_enabled, hide_delivery_datetime: subForm.hide_delivery_datetime, category_types: subForm.category_types } as any;
-
-    if (editingSub) {
-      const { error } = await supabase.from("subcategories").update(payload).eq("id", editingSub.id);
-      if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-      else toast({ title: "Subcategory updated" });
-    } else {
-      const { error } = await supabase.from("subcategories").insert(payload);
-      if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-      else toast({ title: "Subcategory created" });
-    }
-
-    setSavingSub(false);
-    setSubDialogOpen(false);
-    resetSubForm();
-    fetchCategories();
   };
 
   const handleDeleteSub = async (id: string) => {
@@ -247,11 +271,11 @@ const AdminCategories = () => {
               </div>
               <div className="space-y-2">
                 <Label>Short Description</Label>
-                <RichTextEditor value={form.short_description} onChange={(html) => setForm({ ...form, short_description: html })} />
+                {dialogOpen && <RichTextEditor value={form.short_description} onChange={(html) => setForm({ ...form, short_description: html })} />}
               </div>
               <div className="space-y-2">
                 <Label>Long Description</Label>
-                <RichTextEditor value={form.long_description} onChange={(html) => setForm({ ...form, long_description: html })} />
+                {dialogOpen && <RichTextEditor value={form.long_description} onChange={(html) => setForm({ ...form, long_description: html })} />}
               </div>
               {/* SEO Section */}
               <div className="space-y-4 border-t pt-4">
@@ -425,11 +449,11 @@ const AdminCategories = () => {
             </div>
             <div className="space-y-2">
               <Label>Short Description</Label>
-              <RichTextEditor value={subForm.short_description} onChange={(html) => setSubForm({ ...subForm, short_description: html })} />
+              {subDialogOpen && <RichTextEditor value={subForm.short_description} onChange={(html) => setSubForm({ ...subForm, short_description: html })} />}
             </div>
             <div className="space-y-2">
               <Label>Long Description</Label>
-              <RichTextEditor value={subForm.long_description} onChange={(html) => setSubForm({ ...subForm, long_description: html })} />
+              {subDialogOpen && <RichTextEditor value={subForm.long_description} onChange={(html) => setSubForm({ ...subForm, long_description: html })} />}
             </div>
             {/* SEO Section */}
             <div className="space-y-4 border-t pt-4">

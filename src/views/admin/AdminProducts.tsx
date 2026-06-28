@@ -4,7 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import RichTextEditor from "@/components/admin/RichTextEditor";
+import dynamic from "next/dynamic";
+const RichTextEditor = dynamic(() => import("@/components/admin/RichTextEditor"), {
+  ssr: false,
+  loading: () => <div className="border rounded-lg min-h-[90px] sm:min-h-[140px] bg-muted/10 animate-pulse" />
+});
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
@@ -191,78 +195,95 @@ const AdminProducts = () => {
     if (!form.name.trim()) return;
     setSaving(true);
 
-    const authErr = await ensureAdminSession();
-    if (authErr) {
-      toast({ title: "Permission denied", description: authErr, variant: "destructive" });
+    try {
+      const authErr = await ensureAdminSession();
+      if (authErr) {
+        toast({ title: "Permission denied", description: authErr, variant: "destructive" });
+        setSaving(false);
+        return;
+      }
+
+      let imageUrl = form.image_url;
+      const slug = form.slug || generateSlug(form.name);
+      const tags = form.tags ? form.tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
+      const specs = form.specifications.filter(s => s.item.trim() || s.value.trim());
+      
+      // Use first selected category as primary category_id for backward compat
+      const primaryCategoryId = form.category_ids.length > 0 ? form.category_ids[0] : null;
+      
+      const payload = {
+        name: form.name.trim(), slug, short_description: form.short_description || null, description: form.description || null,
+        price: form.price, original_price: form.original_price || null, seller_price: form.seller_price || null,
+        image_url: imageUrl || null, category_id: primaryCategoryId,
+        subcategory_id: form.subcategory_ids.length > 0 ? form.subcategory_ids[0] : null,
+        is_active: form.is_active, is_featured: form.is_featured, stock: form.stock, tags,
+        allow_custom_image: form.allow_custom_image, allow_custom_text: form.allow_custom_text,
+        specifications: specs.length > 0 ? specs : null,
+        seo_title: form.seo_title.trim() || null, seo_description: form.seo_description.trim() || null,
+        delivery_time: form.delivery_time.trim() || null,
+        delivery_mode_id: null,
+        instructions: form.instructions || null, delivery_info: form.delivery_info || null,
+        is_preorder: form.is_preorder,
+        preorder_note: form.preorder_note.trim() || null,
+        preorder_advance_percent: form.preorder_advance_percent || 50,
+        bulk_order_enabled: form.bulk_order_enabled,
+        bulk_min_quantity: form.bulk_min_quantity || 10,
+        bulk_pricing_tiers: (form.bulk_pricing_tiers || []).filter(t => t.min_qty > 0).sort((a, b) => a.min_qty - b.min_qty),
+      } as any;
+
+      let productId: string | null = null;
+
+      if (editing) {
+        const { error } = await supabase.from("products").update(payload).eq("id", editing.id);
+        if (error) throw error;
+        productId = editing.id;
+        toast({ title: "Product updated" });
+      } else {
+        const { data, error } = await supabase.from("products").insert(payload).select("id").single();
+        if (error) throw error;
+        productId = data.id;
+        toast({ title: "Product created" });
+      }
+
+      // Sync variants (sizes + colors)
+      if (productId) {
+        await saveProductVariants(productId);
+      }
+
+      // Sync junction tables
+      if (productId) {
+        const { error: catDelErr } = await supabase.from("product_categories").delete().eq("product_id", productId);
+        if (catDelErr) throw catDelErr;
+
+        if (form.category_ids.length > 0) {
+          const rows = form.category_ids.map(cid => ({ product_id: productId!, category_id: cid }));
+          const { error: catInsErr } = await supabase.from("product_categories").insert(rows);
+          if (catInsErr) throw catInsErr;
+        }
+
+        const { error: subDelErr } = await supabase.from("product_subcategories").delete().eq("product_id", productId);
+        if (subDelErr) throw subDelErr;
+
+        if (form.subcategory_ids.length > 0) {
+          const subRows = form.subcategory_ids.map(sid => ({ product_id: productId!, subcategory_id: sid }));
+          const { error: subInsErr } = await supabase.from("product_subcategories").insert(subRows);
+          if (subInsErr) throw subInsErr;
+        }
+      }
+
+      setDialogOpen(false);
+      resetForm();
+      fetchData();
+    } catch (err: any) {
+      console.error("Failed to save product:", err);
+      toast({
+        title: "Error saving product",
+        description: err?.message || "An unexpected error occurred while saving the product.",
+        variant: "destructive"
+      });
+    } finally {
       setSaving(false);
-      return;
     }
-
-    let imageUrl = form.image_url;
-    const slug = form.slug || generateSlug(form.name);
-    const tags = form.tags ? form.tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
-    const specs = form.specifications.filter(s => s.item.trim() || s.value.trim());
-    
-    // Use first selected category as primary category_id for backward compat
-    const primaryCategoryId = form.category_ids.length > 0 ? form.category_ids[0] : null;
-    
-    const payload = {
-      name: form.name.trim(), slug, short_description: form.short_description || null, description: form.description || null,
-      price: form.price, original_price: form.original_price || null, seller_price: form.seller_price || null,
-      image_url: imageUrl || null, category_id: primaryCategoryId,
-      subcategory_id: form.subcategory_ids.length > 0 ? form.subcategory_ids[0] : null,
-      is_active: form.is_active, is_featured: form.is_featured, stock: form.stock, tags,
-      allow_custom_image: form.allow_custom_image, allow_custom_text: form.allow_custom_text,
-      specifications: specs.length > 0 ? specs : null,
-      seo_title: form.seo_title.trim() || null, seo_description: form.seo_description.trim() || null,
-      delivery_time: form.delivery_time.trim() || null,
-      delivery_mode_id: null,
-      instructions: form.instructions || null, delivery_info: form.delivery_info || null,
-      is_preorder: form.is_preorder,
-      preorder_note: form.preorder_note.trim() || null,
-      preorder_advance_percent: form.preorder_advance_percent || 50,
-      bulk_order_enabled: form.bulk_order_enabled,
-      bulk_min_quantity: form.bulk_min_quantity || 10,
-      bulk_pricing_tiers: (form.bulk_pricing_tiers || []).filter(t => t.min_qty > 0).sort((a, b) => a.min_qty - b.min_qty),
-    } as any;
-
-    let productId: string | null = null;
-
-    if (editing) {
-      const { error } = await supabase.from("products").update(payload).eq("id", editing.id);
-      if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); setSaving(false); return; }
-      productId = editing.id;
-      toast({ title: "Product updated" });
-    } else {
-      const { data, error } = await supabase.from("products").insert(payload).select("id").single();
-      if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); setSaving(false); return; }
-      productId = data.id;
-      toast({ title: "Product created" });
-    }
-
-    // Sync variants (sizes + colors)
-    if (productId) {
-      await saveProductVariants(productId);
-    }
-
-    // Sync junction tables
-    if (productId) {
-      await supabase.from("product_categories").delete().eq("product_id", productId);
-      if (form.category_ids.length > 0) {
-        const rows = form.category_ids.map(cid => ({ product_id: productId!, category_id: cid }));
-        await supabase.from("product_categories").insert(rows);
-      }
-      await supabase.from("product_subcategories").delete().eq("product_id", productId);
-      if (form.subcategory_ids.length > 0) {
-        const subRows = form.subcategory_ids.map(sid => ({ product_id: productId!, subcategory_id: sid }));
-        await supabase.from("product_subcategories").insert(subRows);
-      }
-    }
-
-    setSaving(false);
-    setDialogOpen(false);
-    resetForm();
-    fetchData();
   };
 
   const handleDelete = async (id: string) => {
@@ -510,19 +531,19 @@ const AdminProducts = () => {
 
               <div className="space-y-2">
                 <Label>Short Description</Label>
-                <RichTextEditor value={form.short_description} onChange={(html) => setForm({ ...form, short_description: html })} />
+                {dialogOpen && <RichTextEditor value={form.short_description} onChange={(html) => setForm({ ...form, short_description: html })} />}
               </div>
               <div className="space-y-2">
                 <Label>Long Description</Label>
-                <RichTextEditor value={form.description} onChange={(html) => setForm({ ...form, description: html })} />
+                {dialogOpen && <RichTextEditor value={form.description} onChange={(html) => setForm({ ...form, description: html })} />}
               </div>
               <div className="space-y-2">
                 <Label>Instructions <span className="text-xs text-muted-foreground font-normal">(Care/usage instructions — leave empty for default)</span></Label>
-                <RichTextEditor value={form.instructions} onChange={(html) => setForm({ ...form, instructions: html })} />
+                {dialogOpen && <RichTextEditor value={form.instructions} onChange={(html) => setForm({ ...form, instructions: html })} />}
               </div>
               <div className="space-y-2">
                 <Label>Delivery Info <span className="text-xs text-muted-foreground font-normal">(Custom delivery details — leave empty for default)</span></Label>
-                <RichTextEditor value={form.delivery_info} onChange={(html) => setForm({ ...form, delivery_info: html })} />
+                {dialogOpen && <RichTextEditor value={form.delivery_info} onChange={(html) => setForm({ ...form, delivery_info: html })} />}
               </div>
               <div className="space-y-2">
                 <Label>Image</Label>

@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, useEditorState } from "@tiptap/react";
+import { EditorContent, useEditorState, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
@@ -73,6 +73,7 @@ const ToolBtn = forwardRef<HTMLButtonElement, ToolBtnProps>(({ active, disabled,
 ToolBtn.displayName = "ToolBtn";
 
 const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
+
   const [captionOpen, setCaptionOpen] = useState(false);
   const [captionText, setCaptionText] = useState("");
   const [captionTopic, setCaptionTopic] = useState("");
@@ -81,38 +82,50 @@ const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
   const [linkUrl, setLinkUrl] = useState("");
   const [linkText, setLinkText] = useState("");
   const [savedRange, setSavedRange] = useState<{ from: number; to: number } | null>(null);
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({ link: false, underline: false } as any),
-      Link.configure({ openOnClick: false }),
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Underline,
-      Table.configure({ resizable: true }),
-      TableRow,
-      TableHeader,
-      TableCell,
-      TextStyle,
-      FontSize,
-    ],
-    content: value,
-    onUpdate: ({ editor }) => onChange(editor.getHTML()),
-    editorProps: {
-      attributes: {
-        class: "outline-none min-h-[90px] sm:min-h-[140px] cursor-text rich-text-editor-content",
-        style: "font-size: 16px;",
-      },
-      handleDOMEvents: {
-        touchstart: (_view, event) => {
-          event.stopPropagation();
-          return false;
+  const [editor, setEditor] = useState<Editor | null>(null);
+
+  useEffect(() => {
+    const inst = new Editor({
+      extensions: [
+        StarterKit.configure({ link: false, underline: false } as any),
+        Link.configure({ openOnClick: false }),
+        TextAlign.configure({ types: ["heading", "paragraph"] }),
+        Underline,
+        Table.configure({ resizable: true }),
+        TableRow,
+        TableHeader,
+        TableCell,
+        TextStyle,
+        FontSize,
+      ],
+      content: value,
+      onUpdate: ({ editor }) => onChange(editor.getHTML()),
+      editorProps: {
+        attributes: {
+          class: "outline-none min-h-[90px] sm:min-h-[140px] cursor-text rich-text-editor-content",
+          style: "font-size: 16px;",
         },
-        focus: (_view, event) => {
-          event.stopPropagation();
-          return false;
+        handleDOMEvents: {
+          touchstart: (_view, event) => {
+            event.stopPropagation();
+            return false;
+          },
+          focus: (_view, event) => {
+            event.stopPropagation();
+            return false;
+          },
         },
       },
-    },
-  });
+    });
+
+    setEditor(inst);
+
+    return () => {
+      setTimeout(() => {
+        inst.destroy();
+      }, 0);
+    };
+  }, []);
 
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
@@ -124,6 +137,7 @@ const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
     editor,
     selector: ({ editor }) => {
       const currentBlock = (() => {
+        if (!editor) return "p";
         for (let i = 1; i <= 6; i++) {
           if (editor.isActive("heading", { level: i })) return `h${i}`;
         }
@@ -132,23 +146,23 @@ const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
 
       return {
         currentBlock,
-        currentFontSize: editor.getAttributes("textStyle").fontSize || "",
-        isBold: editor.isActive("bold"),
-        isItalic: editor.isActive("italic"),
-        isUnderline: editor.isActive("underline"),
-        isStrike: editor.isActive("strike"),
-        isCode: editor.isActive("code"),
-        isBulletList: editor.isActive("bulletList"),
-        isOrderedList: editor.isActive("orderedList"),
-        isBlockquote: editor.isActive("blockquote"),
-        isAlignLeft: editor.isActive({ textAlign: "left" }),
-        isAlignCenter: editor.isActive({ textAlign: "center" }),
-        isAlignRight: editor.isActive({ textAlign: "right" }),
-        isAlignJustify: editor.isActive({ textAlign: "justify" }),
-        isLink: editor.isActive("link"),
-        isTable: editor.isActive("table"),
-        canUndo: editor.can().chain().focus().undo().run(),
-        canRedo: editor.can().chain().focus().redo().run(),
+        currentFontSize: editor?.getAttributes("textStyle").fontSize || "",
+        isBold: editor?.isActive("bold") ?? false,
+        isItalic: editor?.isActive("italic") ?? false,
+        isUnderline: editor?.isActive("underline") ?? false,
+        isStrike: editor?.isActive("strike") ?? false,
+        isCode: editor?.isActive("code") ?? false,
+        isBulletList: editor?.isActive("bulletList") ?? false,
+        isOrderedList: editor?.isActive("orderedList") ?? false,
+        isBlockquote: editor?.isActive("blockquote") ?? false,
+        isAlignLeft: editor?.isActive({ textAlign: "left" }) ?? false,
+        isAlignCenter: editor?.isActive({ textAlign: "center" }) ?? false,
+        isAlignRight: editor?.isActive({ textAlign: "right" }) ?? false,
+        isAlignJustify: editor?.isActive({ textAlign: "justify" }) ?? false,
+        isLink: editor?.isActive("link") ?? false,
+        isTable: editor?.isActive("table") ?? false,
+        canUndo: editor ? editor.can().chain().focus().undo().run() : false,
+        canRedo: editor ? editor.can().chain().focus().redo().run() : false,
       };
     },
   });
