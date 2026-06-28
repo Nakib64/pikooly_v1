@@ -9,8 +9,6 @@ verify_jwt = false
 [functions.paypal-payment]
 verify_jwt = false
 
-[functions.sync-google-reviews]
-verify_jwt = false
 [functions.get-maps-key]
 verify_jwt = false
 
