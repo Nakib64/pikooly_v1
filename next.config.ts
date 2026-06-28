@@ -72,6 +72,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  outputFileTracingRoot: process.cwd(),
   // Allow cross-origin image loading from known domains
   images: {
     remotePatterns: [

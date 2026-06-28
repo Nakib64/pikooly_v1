@@ -1,12 +1,13 @@
-import { Navigate, useLocation } from "@/lib/router-adapter";
+import { Navigate } from "@/lib/router-adapter";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import AdminLayout from "./AdminLayout";
 
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isAdmin, loading } = useAuth();
-  const location = useLocation();
+  const pathname = usePathname();
 
-  if (location.pathname === "/admin/login") {
+  if (pathname === "/admin/login") {
     return <>{children}</>;
   }
 

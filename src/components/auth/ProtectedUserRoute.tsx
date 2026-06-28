@@ -1,4 +1,5 @@
-import { Navigate, useLocation } from "@/lib/router-adapter";
+import { Navigate } from "@/lib/router-adapter";
+import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSeller } from "@/hooks/useSeller";
@@ -12,7 +13,7 @@ import { useSeller } from "@/hooks/useSeller";
 const ProtectedUserRoute = ({ children }: { children: ReactNode }) => {
   const { user, isAdmin, loading } = useAuth();
   const { seller, loading: sellerLoading } = useSeller();
-  const location = useLocation();
+  const pathname = usePathname();
 
   if (loading || sellerLoading) {
     return (
@@ -23,7 +24,7 @@ const ProtectedUserRoute = ({ children }: { children: ReactNode }) => {
   }
 
   if (!user) {
-    return <Navigate to="/auth" replace state={{ from: location.pathname }} />;
+    return <Navigate to="/auth" replace state={{ from: pathname }} />;
   }
   if (isAdmin) return <Navigate to="/admin" replace />;
   if (seller && seller.is_active) return <Navigate to="/seller/dashboard" replace />;

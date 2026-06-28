@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
-import { Link, useLocation, useNavigate } from "@/lib/router-adapter";
+import { Link, useNavigate } from "@/lib/router-adapter";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import {
@@ -78,7 +79,7 @@ interface SidebarContentProps {
 const SidebarContent = ({ onItemClick, showCloseButton, onClose }: SidebarContentProps) => {
   const { settings } = useSiteSettings();
   const logoUrl = settings.company_logo || "";
-  const location = useLocation();
+  const pathname = usePathname();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -112,7 +113,7 @@ const SidebarContent = ({ onItemClick, showCloseButton, onClose }: SidebarConten
             </h4>
             <div className="space-y-0.5">
               {group.items.map((item) => {
-                const active = location.pathname === item.path;
+                const active = pathname === item.path;
                 return (
                   <Link
                     key={item.path}
