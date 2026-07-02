@@ -177,7 +177,7 @@ const EventCategoryDetail = () => {
     };
   }, [category, packages, seoDesc, canonical]);
 
-  if (catLoading) {
+  if (!slug || catLoading) {
     return (
       <main className="section-container py-6 space-y-6">
         <div className="h-6 w-32 rounded bg-muted animate-pulse" />

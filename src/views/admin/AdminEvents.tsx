@@ -80,11 +80,12 @@ const CategoriesTab = () => {
 
   const saveMutation = useMutation({
     mutationFn: async (values: any) => {
+      const { faq, ...payload } = values;
       if (editItem) {
-        const { error } = await supabase.from("event_categories").update(values).eq("id", editItem.id);
+        const { error } = await supabase.from("event_categories").update(payload).eq("id", editItem.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("event_categories").insert(values);
+        const { error } = await supabase.from("event_categories").insert(payload);
         if (error) throw error;
       }
     },

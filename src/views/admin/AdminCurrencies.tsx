@@ -22,6 +22,7 @@ interface Currency {
 const AdminCurrencies = () => {
   const queryClient = useQueryClient();
   const [newCurrency, setNewCurrency] = useState({ code: "", name: "", symbol: "", exchange_rate: "1" });
+  const [hoveredCurrencyId, setHoveredCurrencyId] = useState<string | null>(null);
 
   const { data: currencies = [], isLoading } = useQuery({
     queryKey: ["admin-currencies"],
@@ -29,7 +30,8 @@ const AdminCurrencies = () => {
       const { data, error } = await supabase
         .from("currencies")
         .select("*")
-        .order("display_order");
+        .order("display_order", { ascending: true })
+        .order("code", { ascending: true });
       if (error) throw error;
       return data as Currency[];
     },
@@ -82,11 +84,31 @@ const AdminCurrencies = () => {
 
   const setDefault = async (id: string) => {
     // Unset all defaults first
-    await supabase.from("currencies").update({ is_default: false }).neq("id", "");
+    await supabase.from("currencies").update({ is_default: false }).eq("is_default", true);
     await supabase.from("currencies").update({ is_default: true }).eq("id", id);
     queryClient.invalidateQueries({ queryKey: ["admin-currencies"] });
     queryClient.invalidateQueries({ queryKey: ["currencies"] });
     toast.success("Default currency updated");
+  };
+
+  const removeDefault = async (id: string) => {
+    try {
+      const bdtCurrency = currencies.find((c) => c.code === "BDT");
+      if (!bdtCurrency) {
+        toast.error("Base currency (BDT) not found. Cannot remove default.");
+        return;
+      }
+      // Unset all defaults first
+      await supabase.from("currencies").update({ is_default: false }).eq("is_default", true);
+      // Set BDT as default
+      await supabase.from("currencies").update({ is_default: true }).eq("id", bdtCurrency.id);
+
+      queryClient.invalidateQueries({ queryKey: ["admin-currencies"] });
+      queryClient.invalidateQueries({ queryKey: ["currencies"] });
+      toast.success("Default currency removed. BDT is now default.");
+    } catch (error) {
+      toast.error("Failed to remove default currency");
+    }
   };
 
   return (
@@ -172,16 +194,31 @@ const AdminCurrencies = () => {
                 <Button
                   variant={c.is_default ? "default" : "outline"}
                   size="sm"
-                  className="text-xs"
-                  onClick={() => !c.is_default && setDefault(c.id)}
+                  className="text-xs min-w-[110px]"
+                  onMouseEnter={() => setHoveredCurrencyId(c.id)}
+                  onMouseLeave={() => setHoveredCurrencyId(null)}
+                  onClick={() => {
+                    if (c.is_default) {
+                      if (c.code !== "BDT") {
+                        removeDefault(c.id);
+                      }
+                    } else {
+                      setDefault(c.id);
+                    }
+                  }}
+                  disabled={c.is_default && c.code === "BDT"}
                 >
-                  {c.is_default ? "Default" : "Set Default"}
+                  {c.is_default 
+                    ? (c.code === "BDT" 
+                      ? "Default" 
+                      : (hoveredCurrencyId === c.id ? "Default" : "Default"))
+                    : "Set Default"}
                 </Button>
                 <Switch
                   checked={c.is_active}
                   onCheckedChange={(val) => updateMutation.mutate({ id: c.id, is_active: val })}
                 />
-                {!c.is_default && (
+                {!c.is_default && c.code !== "BDT" && (
                   <Button
                     variant="ghost"
                     size="icon"

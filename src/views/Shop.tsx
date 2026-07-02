@@ -353,7 +353,7 @@ const Shop = () => {
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/15 via-primary/8 to-transparent">
                         <svg className="w-8 h-8 text-primary/80" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2.5a2.2 2.2 0 00-2.2 2.2c0 .55.2 1.05.55 1.45A2.2 2.2 0 008.1 8.35c0 .55.2 1.05.55 1.45a2.2 2.2 0 00-.85 4.05 2.2 2.2 0 003.3 1.9V20H9.5a.75.75 0 000 1.5h5a.75.75 0 000-1.5H12.9v-4.25a2.2 2.2 0 003.3-1.9 2.2 2.2 0 00-.85-4.05c.35-.4.55-.9.55-1.45a2.2 2.2 0 00-2.25-2.2c.35-.4.55-.9.55-1.45A2.2 2.2 0 0012 2.5zm0 3.85a1.85 1.85 0 11-.001 3.701A1.85 1.85 0 0112 6.35z" opacity="0.9"/>
+                          <path d="M12 2.5a2.2 2.2 0 00-2.2 2.2c0 .55.2 1.05.55 1.45A2.2 2.2 0 008.1 8.35c0 .55.2 1.05.55 1.45a2.2 2.2 0 00-.85 4.05 2.2 2.2 0 003.3 1.9V20H9.5a.75.75 0 000 1.5h5a.75.75 0 000-1.5H12.9v-4.25a2.2 2.2 0 003.3-1.9 2.2 2.2 0 00-.85-4.05c.35-.4.55-.9.55-1.45a2.2 2.2 0 00-2.25-2.2c.35-.4.55-.9.55-1.45A2.2 2.2 0 0012 2.5zm0 3.85a1.85 1.85 0 11-.001 3.701A1.85 1.85 0 0112 6.35z" opacity="0.9" />
                         </svg>
                       </div>
                     )}
@@ -425,8 +425,8 @@ const Shop = () => {
         {(productsLoading || catsLoading || subsLoading)
           ? Array.from({ length: 10 }).map((_, i) => <ProductCardSkeleton key={i} />)
           : filtered.map((product: any) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            <ProductCard key={product.id} product={product} />
+          ))}
       </div>
 
       {!productsLoading && !catsLoading && !subsLoading && filtered.length === 0 && (

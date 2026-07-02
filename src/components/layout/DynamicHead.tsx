@@ -35,12 +35,12 @@ const DynamicHead = () => {
       document.head.appendChild(apple);
     }
 
-    // Update title: always apply site_title on homepage or when no page-specific title is set
-    const siteTitle = settings.site_title?.trim();
+    // Update title: always apply store_name/site_title on homepage or when no page-specific title is set
+    const siteTitle = (settings.store_name || settings.site_title || "Pikooly")?.trim();
     if (siteTitle) {
       const currentTitle = document.title?.trim();
-      const prevSiteTitle = prevSettingsRef.current.site_title?.trim();
-      const isDefaultTitle = !currentTitle || currentTitle === "Pikooly";
+      const prevSiteTitle = (prevSettingsRef.current.store_name || prevSettingsRef.current.site_title || "Pikooly")?.trim();
+      const isDefaultTitle = !currentTitle || currentTitle === "Pikooly" || (prevSiteTitle && currentTitle === prevSiteTitle);
       const settingsChanged = prevSiteTitle && prevSiteTitle !== siteTitle;
 
       if (isDefaultTitle || isHomepage || settingsChanged) {

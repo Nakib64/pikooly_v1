@@ -46,7 +46,7 @@ const Header = () => {
   const headerRootRef = useRef<HTMLDivElement>(null);
 
   const logoUrl = settings.company_logo || "";
-  const announcementText = settings.announcement_bar_text || "🌸 Same Day Delivery Available in 500+ Cities";
+  const announcementText = settings.announcement_bar_text || "";
   // Render immediately (default enabled) to avoid CLS while settings load
   const showAnnouncement = settings.announcement_bar_enabled !== "false";
 

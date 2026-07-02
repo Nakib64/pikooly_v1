@@ -32,7 +32,8 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
         .from("currencies")
         .select("*")
         .eq("is_active", true)
-        .order("display_order");
+        .order("display_order", { ascending: true })
+        .order("code", { ascending: true });
       if (error) throw error;
       return data as Currency[];
     },

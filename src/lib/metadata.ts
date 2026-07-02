@@ -18,7 +18,7 @@ export async function getSiteMetadata(
       });
     }
 
-    const siteTitle = settings.site_title || "Pikooly";
+    const siteTitle = settings.store_name || settings.site_title || "Pikooly";
     const defaultTitle = settings.homepage_seo_title || `${siteTitle} | Online Flower Shop in Bangladesh`;
     const defaultDesc = settings.homepage_meta_description || "Order fresh flowers, beautiful gifts, and delicious cakes online in Bangladesh.";
 

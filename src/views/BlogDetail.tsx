@@ -206,7 +206,7 @@ const BlogDetail = () => {
     enabled: !!post,
   });
 
-  const siteName = settings.site_title || "Pikooly";
+  const siteName = settings.store_name || settings.site_title || "Pikooly";
   const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://pikooly.com.bd";
   const seoTitle = post ? (post.seo_title || `${post.title} - ${siteName}`) : siteName;
   const seoDesc = post ? (post.seo_description || post.excerpt || "") : "";
@@ -259,7 +259,7 @@ const BlogDetail = () => {
     };
   }, [post, siteName, siteUrl]);
 
-  if (isLoading) {
+  if (!slug || isLoading) {
     return (
       <main className="section-container py-6 md:py-10 pb-6 md:pb-10">
         <Skeleton className="h-6 w-24 mb-6" />

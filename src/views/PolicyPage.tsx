@@ -19,7 +19,7 @@ const PolicyPage = ({ prefix, defaultTitle, defaultSubtitle, defaultContent, pat
   return (
     <main className="pb-2 md:pb-4">
       <SEOHead
-        title={`${title} — ${settings.site_title || "Pikooly"}`}
+        title={`${title} — ${settings.store_name || settings.site_title || "Pikooly"}`}
         description={subtitle}
         canonical={typeof window !== "undefined" ? `${window.location.origin}${path}` : undefined}
       />

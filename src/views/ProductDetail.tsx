@@ -265,7 +265,7 @@ const ProductDetail = () => {
     return tmp.textContent || tmp.innerText || "";
   };
 
-  const siteName = settings.site_title || "Pikooly";
+  const siteName = settings.store_name || settings.site_title || "Pikooly";
   const seoTitle = product ? ((product as any).seo_title || `${product.name} - ${siteName}`) : siteName;
   const seoDesc = product ? stripHtml((product as any).seo_description || product.description || "").slice(0, 160) : "";
   const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://pikooly.com.bd";
@@ -373,7 +373,7 @@ const ProductDetail = () => {
     [cartItems, addonIds]
   );
 
-  if (isLoading) {
+  if (!id || isLoading) {
     return <ProductDetailSkeleton />;
   }
 
@@ -879,7 +879,7 @@ const ProductDetail = () => {
                 onClick={handleBuyNow}
                 className="h-[52px] rounded-sm bg-[hsl(200_30%_22%)] hover:bg-[hsl(200_35%_18%)] text-white text-[13px] font-bold tracking-[0.12em] uppercase flex items-center justify-center gap-1.5 active:scale-[0.98] transition-all"
               >
-                <span>{preorderActive ? `Pre-order Now` : "Buy Now"}</span>
+                <span>{preorderActive ? `Pre-order` : "Buy Now"}</span>
                 <span className="font-bold tabular-nums normal-case tracking-normal">| {formatPrice(preorderActive ? advanceAmount : buyNowTotal)}</span>
               </button>
             </div>
